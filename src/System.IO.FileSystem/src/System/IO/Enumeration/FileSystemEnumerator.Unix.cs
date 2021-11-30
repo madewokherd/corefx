@@ -23,7 +23,7 @@ namespace System.IO.Enumeration
         private string _currentPath;
         private IntPtr _directoryHandle;
         private bool _lastEntryFound;
-        private Queue<string> _pending;
+        private List<string> _pending;
 
         private Interop.Sys.DirectoryEntry _entry;
         private TResult _current;
@@ -158,8 +158,8 @@ namespace System.IO.Enumeration
                             {
                                 // Recursion is on and the directory was accepted, Queue it
                                 if (_pending == null)
-                                    _pending = new Queue<string>();
-                                _pending.Enqueue(Path.Join(_currentPath, entry.FileName));
+                                    _pending = new List<string>();
+                                _pending.Add(Path.Join(_currentPath, entry.FileName));
                             }
                         }
 
@@ -225,7 +225,8 @@ namespace System.IO.Enumeration
                 if (_pending == null || _pending.Count == 0)
                     return false;
 
-                _currentPath = _pending.Dequeue();
+				_currentPath = _pending[0];
+				_pending.RemoveAt(0);
                 _directoryHandle = CreateDirectoryHandle(_currentPath, ignoreNotFound: true);
             }
 

@@ -33,7 +33,7 @@ namespace System.IO.Enumeration
         private IntPtr _directoryHandle;
         private string _currentPath;
         private bool _lastEntryFound;
-        private Queue<(IntPtr Handle, string Path)> _pending;
+        private List<(IntPtr Handle, string Path)> _pending;
 
         /// <summary>
         /// Encapsulates a find operation.
@@ -175,8 +175,8 @@ namespace System.IO.Enumeration
                                 try
                                 {
                                     if (_pending == null)
-                                        _pending = new Queue<(IntPtr, string)>();
-                                    _pending.Enqueue((subDirectoryHandle, subDirectory));
+                                        _pending = new List<(IntPtr, string)>();
+                                    _pending.Add((subDirectoryHandle, subDirectory));
                                 }
                                 catch
                                 {
@@ -213,7 +213,8 @@ namespace System.IO.Enumeration
             if (_pending == null || _pending.Count == 0)
                 return false;
 
-            (_directoryHandle, _currentPath) = _pending.Dequeue();
+            (_directoryHandle, _currentPath) = _pending[0];
+			_pending.RemoveAt(0);
             return true;
         }
 
@@ -230,8 +231,8 @@ namespace System.IO.Enumeration
 
                     if (_pending != null)
                     {
-                        while (_pending.Count > 0)
-                            Interop.Kernel32.CloseHandle(_pending.Dequeue().Handle);
+						foreach (var item in _pending)
+                            Interop.Kernel32.CloseHandle(item.Handle);
                         _pending = null;
                     }
 
