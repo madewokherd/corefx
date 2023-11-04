@@ -1044,7 +1044,7 @@ namespace System.Collections.Generic
             {
                 ArraySortHelper<T>.Sort(_items, 0, _size, comparison);
             }
-            _version++;
+            // _version++; // .NET Framework is broken and doesn't do this, and SHENZHEN I/O depends on the bug
         }
 
         // ToArray returns an array containing the contents of the List.
