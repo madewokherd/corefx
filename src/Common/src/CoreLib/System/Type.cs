@@ -176,7 +176,13 @@ namespace System
 
         public MethodInfo GetMethod(string name, Type[] types) => GetMethod(name, types, null);
         public MethodInfo GetMethod(string name, Type[] types, ParameterModifier[] modifiers) => GetMethod(name, Type.DefaultLookup, null, types, modifiers);
-        public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers) => GetMethod(name, bindingAttr, binder, CallingConventions.Any, types, modifiers);
+        public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+        {
+            if (name == "op_Implicit" && Assembly.GetCallingAssembly().GetName().Name == "NLog")
+                // Work-around for https://bugs.winehq.org/show_bug.cgi?id=51317
+                return null;
+            return GetMethod(name, bindingAttr, binder, CallingConventions.Any, types, modifiers);
+        }
         public MethodInfo GetMethod(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
         {
             if (name == null)
