@@ -44,14 +44,18 @@ typedef enum
 Issue: #7342
 Disable padded warning which occurs in case of 32-bit builds
 */
+#if defined (__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpadded"
+#endif
 typedef struct
 {
     uint64_t length;
     uint8_t* data;
 } PAL_GssBuffer;
+#if defined (__clang__)
 #pragma clang diagnostic pop
+#endif
 
 /*
 Shims the gss_release_buffer method.

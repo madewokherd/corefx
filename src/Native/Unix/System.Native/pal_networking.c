@@ -1077,7 +1077,7 @@ static int32_t GetMaxLingerTime()
     return maxLingerTime;
 }
 #else
-static int32_t GetMaxLingerTime()
+static int32_t GetMaxLingerTime(void)
 {
     // On other platforms, the maximum linger time is locked to the smaller of
     // 65535 (the maximum time for winsock) and the maximum signed value that

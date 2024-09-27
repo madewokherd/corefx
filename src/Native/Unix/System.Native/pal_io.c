@@ -92,15 +92,17 @@ c_static_assert(PAL_S_IFSOCK == S_IFSOCK);
 // declared by the dirent.h header on the local system.
 // (AIX doesn't have dirent d_type, so none of this there)
 #if defined(DT_UNKNOWN)
-c_static_assert(PAL_DT_UNKNOWN == DT_UNKNOWN);
-c_static_assert(PAL_DT_FIFO == DT_FIFO);
-c_static_assert(PAL_DT_CHR == DT_CHR);
-c_static_assert(PAL_DT_DIR == DT_DIR);
-c_static_assert(PAL_DT_BLK == DT_BLK);
-c_static_assert(PAL_DT_REG == DT_REG);
-c_static_assert(PAL_DT_LNK == DT_LNK);
-c_static_assert(PAL_DT_SOCK == DT_SOCK);
-c_static_assert(PAL_DT_WHT == DT_WHT);
+#define TO_NODETYPE(x) (enum NodeType)(x)
+c_static_assert(PAL_DT_UNKNOWN == TO_NODETYPE(DT_UNKNOWN));
+c_static_assert(PAL_DT_FIFO == TO_NODETYPE(DT_FIFO));
+c_static_assert(PAL_DT_CHR == TO_NODETYPE(DT_CHR));
+c_static_assert(PAL_DT_DIR == TO_NODETYPE(DT_DIR));
+c_static_assert(PAL_DT_BLK == TO_NODETYPE(DT_BLK));
+c_static_assert(PAL_DT_REG == TO_NODETYPE(DT_REG));
+c_static_assert(PAL_DT_LNK == TO_NODETYPE(DT_LNK));
+c_static_assert(PAL_DT_SOCK == TO_NODETYPE(DT_SOCK));
+c_static_assert(PAL_DT_WHT == TO_NODETYPE(DT_WHT));
+#undef TO_NODETYPE
 #endif
 
 // Validate that our Lock enum value are correct for the platform
@@ -404,6 +406,14 @@ int32_t SystemNative_ReadDirR(DIR* dir, uint8_t* buffer, int32_t bufferSize, str
     }
 
     struct dirent* result = NULL;
+
+#if defined (__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#elif defined (__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #ifdef _AIX
     // AIX returns 0 on success, but bizarrely, it returns 9 for both error and
     // end-of-directory. result is NULL for both cases. The API returns the
@@ -422,6 +432,11 @@ int32_t SystemNative_ReadDirR(DIR* dir, uint8_t* buffer, int32_t bufferSize, str
     }
 #else
     int error = readdir_r(dir, entry, &result);
+#if defined (__clang__)
+#pragma clang diagnostic pop
+#elif defined (__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
     // positive error number returned -> failure
     if (error != 0)
