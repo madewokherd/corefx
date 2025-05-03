@@ -1051,7 +1051,7 @@ int32_t SystemNative_SetIPv6MulticastOption(intptr_t socket, int32_t multicastOp
 }
 
 #if defined(__APPLE__) && __APPLE__
-static int32_t GetMaxLingerTime()
+static int32_t GetMaxLingerTime(void)
 {
     static volatile int32_t MaxLingerTime = -1;
     c_static_assert(sizeof_member(struct xsocket, so_linger) == 2);

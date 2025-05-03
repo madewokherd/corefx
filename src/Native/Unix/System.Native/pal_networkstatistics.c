@@ -237,7 +237,7 @@ int32_t SystemNative_GetIcmpv6GlobalStatistics(struct Icmpv6GlobalStatistics* re
     return 0;
 }
 
-int32_t SystemNative_GetEstimatedTcpConnectionCount()
+int32_t SystemNative_GetEstimatedTcpConnectionCount(void)
 {
     int32_t count;
     size_t oldlenp = sizeof(count);
@@ -245,7 +245,7 @@ int32_t SystemNative_GetEstimatedTcpConnectionCount()
     return count;
 }
 
-static size_t GetEstimatedTcpPcbSize()
+static size_t GetEstimatedTcpPcbSize(void)
 {
     void* oldp = NULL;
     void* newp = NULL;
@@ -337,7 +337,7 @@ int32_t SystemNative_GetActiveTcpConnectionInfos(struct NativeTcpConnectionInfor
     return 0;
 }
 
-int32_t SystemNative_GetEstimatedUdpListenerCount()
+int32_t SystemNative_GetEstimatedUdpListenerCount(void)
 {
     int32_t count;
     size_t oldlenp = sizeof(count);
@@ -345,7 +345,7 @@ int32_t SystemNative_GetEstimatedUdpListenerCount()
     return count;
 }
 
-static size_t GetEstimatedUdpPcbSize()
+static size_t GetEstimatedUdpPcbSize(void)
 {
     void* oldp = NULL;
     void* newp = NULL;
@@ -493,7 +493,7 @@ int32_t SystemNative_GetNativeIPInterfaceStatistics(char* interfaceName, struct 
     return -1;
 }
 
-int32_t SystemNative_GetNumRoutes()
+int32_t SystemNative_GetNumRoutes(void)
 {
     int routeDumpMib[] = {CTL_NET, PF_ROUTE, 0, 0, NET_RT_DUMP, 0};
 
