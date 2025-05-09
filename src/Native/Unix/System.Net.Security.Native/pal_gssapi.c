@@ -505,7 +505,7 @@ uint32_t NetSecurityNative_InitiateCredWithPassword(uint32_t* minorStatus,
         minorStatus, isNtlm, desiredName, password, passwdLen, GSS_C_INITIATE, outputCredHandle);
 }
 
-uint32_t NetSecurityNative_IsNtlmInstalled()
+uint32_t NetSecurityNative_IsNtlmInstalled(void)
 {
 #if HAVE_GSS_SPNEGO_MECHANISM
     gss_OID ntlmOid = GSS_NTLM_MECHANISM;
