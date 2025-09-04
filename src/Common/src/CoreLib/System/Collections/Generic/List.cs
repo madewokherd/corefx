@@ -567,19 +567,20 @@ namespace System.Collections.Generic
                 ThrowHelper.ThrowArgumentNullException(ExceptionArgument.action);
             }
 
-            int version = _version;
+            //int version = _version;
 
             for (int i = 0; i < _size; i++)
             {
-                if (version != _version)
-                {
-                    break;
-                }
+                //if (version != _version)
+                //{
+                //    break;
+                //}
                 action(_items[i]);
             }
 
-            if (version != _version)
-                ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
+            //if (version != _version)
+            //    ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
+			// .NET Framework doesn't check this. Sword of the Stars: The Pit depends on this behavior.
         }
 
         // Returns an enumerator for this list with the given
